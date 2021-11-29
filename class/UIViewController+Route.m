@@ -11,19 +11,21 @@
 
 @implementation UIViewController (Route)
 
-static RouteCallbackBlock onceBlock;
-static NSDictionary *onceDict;
+static NSString *onceBlock;
+static char paramsKey;
 - (void)setReturnBlock:(RouteCallbackBlock)returnBlock {
+    onceBlock = NSStringFromClass(self.class);
     objc_setAssociatedObject(self, &onceBlock, returnBlock, OBJC_ASSOCIATION_COPY);
 }
 - (RouteCallbackBlock)returnBlock {
+    onceBlock = NSStringFromClass(self.class);
     return objc_getAssociatedObject(self, &onceBlock);
 }
 - (void)setParameters:(NSDictionary *)parameters {
-    objc_setAssociatedObject(self, &onceDict, parameters, OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, &paramsKey, parameters, OBJC_ASSOCIATION_COPY);
 }
 - (NSDictionary *)parameters {
-    return objc_getAssociatedObject(self, &onceDict);
+    return objc_getAssociatedObject(self, &paramsKey);
 }
 
 
